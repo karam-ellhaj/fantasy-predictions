@@ -3,13 +3,13 @@ import joblib
 import json
 import numpy as np
 
-model = joblib.load('model.lgbm')
-
+model = joblib.load('/home/karam/Projects/AI/Personal/fpl/deployment/static/model.lgbm')
 app = Flask(__name__)
 
 @app.route('/',methods=['POST'])
 def predict():
-    data = np.array(json.loads( request.data.decode())['X']).reshape(1,-1)
+    print(request.data)
+    data = np.array(json.loads(request.data.decode())['X']).reshape(1,-1)
     pd = list(model.predict(data))
     return {'prediction':list(pd)}
 app.run()
