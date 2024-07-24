@@ -9,7 +9,6 @@ def input_features()->dict:
             'goals_conceded',
             'goals_scored',
             'minutes',
-            'opponent_team',
             'own_goals',
             'penalties_missed',
             'penalties_saved',
