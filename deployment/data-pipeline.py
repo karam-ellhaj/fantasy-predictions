@@ -14,21 +14,15 @@ def input_features()->dict:
             'penalties_saved',
             'red_cards',
             'saves',
+            'selected',
             'was_home',
             'yellow_cards',
             'GW',
-            'total_points',
-        ]
-    computed = [
-        'total_points_lag_minus_bonus',
-        'clean_sheet_position'
-        ]
+            'total_points_lag']
     to_feed_model = {}
     
     for feature in inputed:
         to_feed_model[feature] = int(input(feature+': '))
-    to_feed_model['total_points_lag_minus_bonus'] = to_feed_model['total_points'] - to_feed_model['bonus']
-    to_feed_model['clean_sheet_position'] = to_feed_model['clean_sheets'] * to_feed_model['position']
 
     return list(to_feed_model.values())
 
