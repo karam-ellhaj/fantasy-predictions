@@ -1,4 +1,4 @@
-# This is an the API endpoint for the machine learning model 
+# This is the API endpoint for the machine learning model that predicts the points of the player in a match in fantasy
 #### the model excpects those features to predict the player total-points
 
 - position: Player's role on the field (e.g., forward, midfielder)
