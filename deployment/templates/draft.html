@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Fantasy Prediction</h1>
-        <form action="predict_api" method="post" id="featureForm"> 
+        <form action="/predict_api" method="post" id="featureForm"> 
             <div class="form-group">
                 <label for="position">Position (0: DEF, 1: FWD, 2: GK, 3: MID):</label>
                 <input type="number" id="position" name="position" required>
@@ -83,32 +83,45 @@
         <div id="prediction-output"></div>
     </div>
     <script>
-        document.getElementById('featureForm').onsubmit = async function(event) {
+        document.getElementById('featureForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            let formData = new FormData(event.target);
-            let data = Object.fromEntries(formData.entries());
-        
-            try {
-                let response = await fetch('/predict_api', {
-                    method: 'POST',
-                    body: new URLSearchParams(data)
-                });
-        
-                let result = await response.json();
-        
-                if (result.prediction) {
-                    document.getElementById('prediction-output').innerText = 
-                        `Predicted Output: ${result.prediction[0]}`;
-                } else if (result.error) {
-                    document.getElementById('prediction-output').innerText = 
-                        `Error: ${result.error}`;
-                }
-            } catch (error) {
+            const data = {
+                position: parseInt(document.getElementById('position').value),
+                assists: parseInt(document.getElementById('assists').value),
+                bonus: parseInt(document.getElementById('bonus').value),
+                clean_sheets: parseInt(document.getElementById('clean_sheets').value),
+                goals_conceded: parseInt(document.getElementById('goals_conceded').value),
+                goals_scored: parseInt(document.getElementById('goals_scored').value),
+                minutes: parseInt(document.getElementById('minutes').value),
+                own_goals: parseInt(document.getElementById('own_goals').value),
+                penalties_missed: parseInt(document.getElementById('penalties_missed').value),
+                penalties_saved: parseInt(document.getElementById('penalties_saved').value),
+                red_cards: parseInt(document.getElementById('red_cards').value),
+                saves: parseInt(document.getElementById('saves').value),
+                selected: parseInt(document.getElementById('selected').value),
+                was_home: parseInt(document.getElementById('was_home').value),
+                yellow_cards: parseInt(document.getElementById('yellow_cards').value),
+                GW: parseInt(document.getElementById('GW').value),
+                total_points_lag: parseInt(document.getElementById('total_points_lag').value),
+            };
+
+            fetch('http://127.0.0.1:5000/get_form_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded' 
+                },
+                body: new URLSearchParams(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log("Form data:", result); 
+            })
+            .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('prediction-output').innerText = 'Error occurred while making prediction.';
-            }
-        };
-        </script>        
+                document.getElementById('prediction-output').textContent = 'An error occurred. Please try again.';
+            });
+        });
+    </script>
 </body>
 </html>
