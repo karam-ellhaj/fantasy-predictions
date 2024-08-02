@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Input Form</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Fantasy Prediction</h1>
+        <form action="/predict_api" method="post" id="featureForm"> 
+            <div class="form-group">
+                <label for="position">Position (0: DEF, 1: FWD, 2: GK, 3: MID):</label>
+                <input type="number" id="position" name="position" required>
+            </div>
+            <div class="form-group">
+                <label for="assists">Assists:</label>
+                <input type="number" id="assists" name="assists" required>
+            </div>
+            <div class="form-group">
+                <label for="bonus">Bonus:</label>
+                <input type="number" id="bonus" name="bonus" required>
+            </div>
+            <div class="form-group">
+                <label for="clean_sheets">Clean Sheets:</label>
+                <input type="number" id="clean_sheets" name="clean_sheets" required>
+            </div>
+            <div class="form-group">
+                <label for="goals_conceded">Goals Conceded:</label>
+                <input type="number" id="goals_conceded" name="goals_conceded" required>
+            </div>
+            <div class="form-group">
+                <label for="goals_scored">Goals Scored:</label>
+                <input type="number" id="goals_scored" name="goals_scored" required>
+            </div>
+            <div class="form-group">
+                <label for="minutes">Minutes:</label>
+                <input type="number" id="minutes" name="minutes" required>
+            </div>
+            <div class="form-group">
+                <label for="own_goals">Own Goals:</label>
+                <input type="number" id="own_goals" name="own_goals" required>
+            </div>
+            <div class="form-group">
+                <label for="penalties_missed">Penalties Missed:</label>
+                <input type="number" id="penalties_missed" name="penalties_missed" required>
+            </div>
+            <div class="form-group">
+                <label for="penalties_saved">Penalties Saved:</label>
+                <input type="number" id="penalties_saved" name="penalties_saved" required>
+            </div>
+            <div class="form-group">
+                <label for="red_cards">Red Cards:</label>
+                <input type="number" id="red_cards" name="red_cards" required>
+            </div>
+            <div class="form-group">
+                <label for="saves">Saves:</label>
+                <input type="number" id="saves" name="saves" required>
+            </div>
+            <div class="form-group">
+                <label for="selected">Selected:</label>
+                <input type="number" id="selected" name="selected" required>
+            </div>
+            <div class="form-group">
+                <label for="was_home">Was Home (0: Away, 1: Home):</label>
+                <input type="number" id="was_home" name="was_home" required>
+            </div>
+            <div class="form-group">
+                <label for="yellow_cards">Yellow Cards:</label>
+                <input type="number" id="yellow_cards" name="yellow_cards" required>
+            </div>
+            <div class="form-group">
+                <label for="GW">GW:</label>
+                <input type="number" id="GW" name="GW" required>
+            </div>
+            <div class="form-group">
+                <label for="total_points_lag">Total Points Lag:</label>
+                <input type="number" id="total_points_lag" name="total_points_lag" required>
+            </div>
+            <button type="submit" class="rounded-button">Submit</button>
+        </form>
+        <div id="prediction-output"></div>
+    </div>
+    <script>
+        document.getElementById('featureForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const data = {
+                position: parseInt(document.getElementById('position').value),
+                assists: parseInt(document.getElementById('assists').value),
+                bonus: parseInt(document.getElementById('bonus').value),
+                clean_sheets: parseInt(document.getElementById('clean_sheets').value),
+                goals_conceded: parseInt(document.getElementById('goals_conceded').value),
+                goals_scored: parseInt(document.getElementById('goals_scored').value),
+                minutes: parseInt(document.getElementById('minutes').value),
+                own_goals: parseInt(document.getElementById('own_goals').value),
+                penalties_missed: parseInt(document.getElementById('penalties_missed').value),
+                penalties_saved: parseInt(document.getElementById('penalties_saved').value),
+                red_cards: parseInt(document.getElementById('red_cards').value),
+                saves: parseInt(document.getElementById('saves').value),
+                selected: parseInt(document.getElementById('selected').value),
+                was_home: parseInt(document.getElementById('was_home').value),
+                yellow_cards: parseInt(document.getElementById('yellow_cards').value),
+                GW: parseInt(document.getElementById('GW').value),
+                total_points_lag: parseInt(document.getElementById('total_points_lag').value),
+            };
+
+            fetch('http://127.0.0.1:5000/get_form_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded' 
+                },
+                body: new URLSearchParams(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log("Form data:", result); 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('prediction-output').textContent = 'An error occurred. Please try again.';
+            });
+        });
+    </script>
+</body>
+</html>
